@@ -1,0 +1,114 @@
+[
+  {
+    "start": "05:00",
+    "end": "05:10",
+    "type": "routine",
+    "title": "Wake up",
+    "detail": "Drink water, wake up body"
+  },
+  {
+    "start": "05:10",
+    "end": "05:30",
+    "type": "exercise",
+    "title": "Exercise",
+    "detail": "Plank + stretching"
+  },
+  {
+    "start": "05:30",
+    "end": "05:35",
+    "type": "break",
+    "title": "Break",
+    "detail": "Rest and breathe"
+  },
+  {
+    "start": "05:35",
+    "end": "05:55",
+    "type": "listening",
+    "title": "Listening Practice",
+    "detail": "BBC 6 Minute English"
+  },
+  {
+    "start": "05:55",
+    "end": "06:00",
+    "type": "break",
+    "title": "Break",
+    "detail": "Rest"
+  },
+  {
+    "start": "06:00",
+    "end": "06:30",
+    "type": "reading",
+    "title": "Reading Practice",
+    "detail": "Morning news article"
+  },
+  {
+    "start": "06:30",
+    "end": "07:00",
+    "type": "writing",
+    "title": "Writing Practice",
+    "detail": "Daily journal entry"
+  },
+  {
+    "start": "07:00",
+    "end": "08:00",
+    "type": "meal",
+    "title": "Breakfast",
+    "detail": "Healthy breakfast"
+  },
+  {
+    "start": "08:00",
+    "end": "12:00",
+    "type": "work",
+    "title": "Deep Work",
+    "detail": "Focus on main project"
+  },
+  {
+    "start": "12:00",
+    "end": "13:00",
+    "type": "meal",
+    "title": "Lunch",
+    "detail": "Take a break"
+  },
+  {
+    "start": "13:00",
+    "end": "17:00",
+    "type": "work",
+    "title": "Afternoon Work",
+    "detail": "Continue main tasks"
+  },
+  {
+    "start": "17:00",
+    "end": "18:00",
+    "type": "exercise",
+    "title": "Evening Exercise",
+    "detail": "Gym session or outdoor activity"
+  },
+  {
+    "start": "18:00",
+    "end": "19:00",
+    "type": "meal",
+    "title": "Dinner",
+    "detail": "Dinner time"
+  },
+  {
+    "start": "19:00",
+    "end": "20:00",
+    "type": "reading",
+    "title": "Deep Reading",
+    "detail": "Book or article reading"
+  },
+  {
+    "start": "20:00",
+    "end": "21:00",
+    "type": "reflection",
+    "title": "Reflection & Planning",
+    "detail": "Review day and plan tomorrow"
+  },
+  {
+    "start": "21:00",
+    "end": "22:00",
+    "type": "routine",
+    "title": "Evening Routine",
+    "detail": "Prepare for sleep"
+  }
+]

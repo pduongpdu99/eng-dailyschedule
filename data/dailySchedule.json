@@ -1,0 +1,435 @@
+{
+  "default": [],
+  "2026-03-31": [
+    {
+      "start": "05:00",
+      "end": "05:10",
+      "type": "routine",
+      "title": "Wake Up",
+      "detail": "Drink water and wake up body"
+    },
+    {
+      "start": "05:10",
+      "end": "05:30",
+      "type": "exercise",
+      "title": "Morning Exercise",
+      "detail": "Plank and stretching (bodyweight)"
+    },
+    {
+      "start": "05:30",
+      "end": "05:35",
+      "type": "break",
+      "title": "Short Break",
+      "detail": "Stabilize breathing, no phone"
+    },
+    {
+      "start": "05:35",
+      "end": "05:55",
+      "type": "listening",
+      "title": "Listening Practice",
+      "detail": "Listen twice and note keywords (BBC 6 Minute English)"
+    },
+    {
+      "start": "05:55",
+      "end": "06:00",
+      "type": "break",
+      "title": "Break",
+      "detail": "Short rest"
+    },
+    {
+      "start": "06:00",
+      "end": "06:40",
+      "type": "speaking",
+      "title": "Shadowing Practice",
+      "detail": "Shadow 3 times and record voice (BBC Learning English)"
+    },
+    {
+      "start": "06:40",
+      "end": "06:45",
+      "type": "break",
+      "title": "Reset Break",
+      "detail": "Short reset"
+    },
+    {
+      "start": "06:45",
+      "end": "07:05",
+      "type": "writing",
+      "title": "Sentence Pattern Practice",
+      "detail": "Write and speak 5 sentences (Opinion / Advantage–Disadvantage)"
+    },
+    {
+      "start": "07:05",
+      "end": "07:25",
+      "type": "meal",
+      "title": "Breakfast",
+      "detail": "Eat breakfast and relax"
+    },
+    {
+      "start": "07:25",
+      "end": "07:30",
+      "type": "break",
+      "title": "Short Break",
+      "detail": "Relax"
+    },
+    {
+      "start": "07:30",
+      "end": "07:55",
+      "type": "listening",
+      "title": "Passive Listening",
+      "detail": "Replay morning audio (BBC 6 Minute English)"
+    },
+    {
+      "start": "07:55",
+      "end": "08:00",
+      "type": "break",
+      "title": "Prepare for Work",
+      "detail": "Prepare for next task"
+    },
+    {
+      "start": "08:00",
+      "end": "09:00",
+      "type": "work",
+      "title": "Other Work",
+      "detail": "Busy time for other responsibilities"
+    },
+    {
+      "start": "09:00",
+      "end": "10:00",
+      "type": "reading",
+      "title": "Deep Reading",
+      "detail": "Complete one B2 reading practice"
+    },
+    {
+      "start": "10:00",
+      "end": "10:05",
+      "type": "break",
+      "title": "Reset Break",
+      "detail": "Short rest"
+    },
+    {
+      "start": "10:05",
+      "end": "11:30",
+      "type": "reading",
+      "title": "Reading Analysis",
+      "detail": "Analyze text, learn collocations and academic vocabulary"
+    },
+    {
+      "start": "11:30",
+      "end": "13:30",
+      "type": "break",
+      "title": "Lunch and Nap",
+      "detail": "Eat lunch and rest"
+    },
+    {
+      "start": "13:30",
+      "end": "14:15",
+      "type": "listening",
+      "title": "Listening Practice",
+      "detail": "Listen and note phrases (The English We Speak)"
+    },
+    {
+      "start": "14:15",
+      "end": "14:20",
+      "type": "break",
+      "title": "Short Break",
+      "detail": "Relax"
+    },
+    {
+      "start": "14:20",
+      "end": "15:00",
+      "type": "writing",
+      "title": "Writing Practice",
+      "detail": "Write one B2 opinion paragraph"
+    },
+    {
+      "start": "15:00",
+      "end": "15:05",
+      "type": "break",
+      "title": "Reset Break",
+      "detail": "Short reset"
+    },
+    {
+      "start": "15:05",
+      "end": "16:30",
+      "type": "speaking",
+      "title": "Speaking Practice",
+      "detail": "Speak and record answers (exam topics: technology / education)"
+    },
+    {
+      "start": "16:30",
+      "end": "18:00",
+      "type": "exercise",
+      "title": "Physical Training",
+      "detail": "Workout and walking"
+    },
+    {
+      "start": "18:00",
+      "end": "20:00",
+      "type": "routine",
+      "title": "Dinner and Personal Time",
+      "detail": "Dinner and relaxation"
+    },
+    {
+      "start": "20:00",
+      "end": "20:45",
+      "type": "listening",
+      "title": "Listening Review",
+      "detail": "Replay morning audio"
+    },
+    {
+      "start": "20:45",
+      "end": "20:50",
+      "type": "break",
+      "title": "Break",
+      "detail": "Short rest"
+    },
+    {
+      "start": "20:50",
+      "end": "21:30",
+      "type": "speaking",
+      "title": "Shadowing and Paraphrasing",
+      "detail": "Repeat and paraphrase morning video"
+    },
+    {
+      "start": "21:30",
+      "end": "22:00",
+      "type": "reflection",
+      "title": "Daily Reflection",
+      "detail": "Write summary: Today I learned..."
+    }
+  ],
+  "2026-04-01": [
+    {
+      "start": "05:00",
+      "end": "05:10",
+      "type": "routine",
+      "section": "early_morning",
+      "title": "Wake Up",
+      "detail": "Drink water and wake up body"
+    },
+    {
+      "start": "05:10",
+      "end": "05:30",
+      "type": "exercise",
+      "section": "early_morning",
+      "title": "Morning Exercise",
+      "detail": "Plank and stretching (bodyweight)"
+    },
+    {
+      "start": "05:30",
+      "end": "05:35",
+      "type": "break",
+      "section": "early_morning",
+      "title": "Short Break",
+      "detail": "Stabilize breathing, no phone"
+    },
+    {
+      "start": "05:35",
+      "end": "05:55",
+      "type": "listening",
+      "section": "early_morning",
+      "title": "Listening Practice",
+      "detail": "Listen twice and note keywords (BBC 6 Minute English)"
+    },
+    {
+      "start": "05:55",
+      "end": "06:00",
+      "type": "break",
+      "section": "early_morning",
+      "title": "Short Break",
+      "detail": "Short rest"
+    },
+    {
+      "start": "06:00",
+      "end": "06:40",
+      "type": "speaking",
+      "section": "early_morning",
+      "title": "Shadowing Practice",
+      "detail": "Shadow 3 times and record voice (BBC Learning English)"
+    },
+    {
+      "start": "06:40",
+      "end": "06:45",
+      "type": "break",
+      "section": "early_morning",
+      "title": "Reset Break",
+      "detail": "Short reset"
+    },
+    {
+      "start": "06:45",
+      "end": "07:05",
+      "type": "writing",
+      "section": "early_morning",
+      "title": "Sentence Pattern Practice",
+      "detail": "Write and speak 5 sentences (Opinion / Advantage–Disadvantage)"
+    },
+    {
+      "start": "07:05",
+      "end": "07:25",
+      "type": "meal",
+      "section": "morning_transition",
+      "title": "Breakfast",
+      "detail": "Eat breakfast and relax"
+    },
+    {
+      "start": "07:25",
+      "end": "07:30",
+      "type": "break",
+      "section": "morning_transition",
+      "title": "Short Break",
+      "detail": "Relax"
+    },
+    {
+      "start": "07:30",
+      "end": "07:55",
+      "type": "listening",
+      "section": "morning_transition",
+      "title": "Passive Listening",
+      "detail": "Replay morning audio (BBC 6 Minute English)"
+    },
+    {
+      "start": "07:55",
+      "end": "08:00",
+      "type": "break",
+      "section": "morning_transition",
+      "title": "Preparation",
+      "detail": "Prepare next study block"
+    },
+    {
+      "start": "08:00",
+      "end": "09:00",
+      "type": "reading",
+      "section": "morning_deep_study",
+      "title": "Reading Practice",
+      "detail": "Complete one B2 reading practice"
+    },
+    {
+      "start": "09:00",
+      "end": "09:05",
+      "type": "break",
+      "section": "morning_deep_study",
+      "title": "Short Break",
+      "detail": "Reset"
+    },
+    {
+      "start": "09:05",
+      "end": "10:00",
+      "type": "reading",
+      "section": "morning_deep_study",
+      "title": "Reading Analysis",
+      "detail": "Review answers and vocabulary"
+    },
+    {
+      "start": "10:00",
+      "end": "10:05",
+      "type": "break",
+      "section": "morning_deep_study",
+      "title": "Break",
+      "detail": "Short rest"
+    },
+    {
+      "start": "10:05",
+      "end": "11:30",
+      "type": "reading",
+      "section": "morning_deep_study",
+      "title": "Vocabulary Expansion",
+      "detail": "Extract collocations, phrases and academic expressions"
+    },
+    {
+      "start": "11:30",
+      "end": "13:30",
+      "type": "break",
+      "section": "midday",
+      "title": "Lunch and Nap",
+      "detail": "Eat lunch and rest"
+    },
+    {
+      "start": "13:30",
+      "end": "14:15",
+      "type": "listening",
+      "section": "afternoon_study",
+      "title": "Listening Practice",
+      "detail": "Listen and note phrases (The English We Speak)"
+    },
+    {
+      "start": "14:15",
+      "end": "14:20",
+      "type": "break",
+      "section": "afternoon_study",
+      "title": "Short Break",
+      "detail": "Relax"
+    },
+    {
+      "start": "14:20",
+      "end": "15:00",
+      "type": "writing",
+      "section": "afternoon_study",
+      "title": "Writing Practice",
+      "detail": "Write one B2 opinion paragraph"
+    },
+    {
+      "start": "15:00",
+      "end": "15:05",
+      "type": "break",
+      "section": "afternoon_study",
+      "title": "Reset Break",
+      "detail": "Short reset"
+    },
+    {
+      "start": "15:05",
+      "end": "16:30",
+      "type": "speaking",
+      "section": "afternoon_study",
+      "title": "Speaking Practice",
+      "detail": "Speak and record answers (topics: technology / education)"
+    },
+    {
+      "start": "16:30",
+      "end": "18:00",
+      "type": "exercise",
+      "section": "evening",
+      "title": "Physical Training",
+      "detail": "Workout and walking"
+    },
+    {
+      "start": "18:00",
+      "end": "20:00",
+      "type": "routine",
+      "section": "evening",
+      "title": "Dinner and Personal Time",
+      "detail": "Dinner and relaxation"
+    },
+    {
+      "start": "20:00",
+      "end": "20:45",
+      "type": "listening",
+      "section": "night_study",
+      "title": "Listening Review",
+      "detail": "Replay morning audio"
+    },
+    {
+      "start": "20:45",
+      "end": "20:50",
+      "type": "break",
+      "section": "night_study",
+      "title": "Short Break",
+      "detail": "Rest"
+    },
+    {
+      "start": "20:50",
+      "end": "21:30",
+      "type": "speaking",
+      "section": "night_study",
+      "title": "Shadowing and Paraphrasing",
+      "detail": "Repeat and paraphrase the morning video"
+    },
+    {
+      "start": "21:30",
+      "end": "22:00",
+      "type": "reflection",
+      "section": "night_study",
+      "title": "Daily Reflection",
+      "detail": "Write summary: Today I learned..."
+    }
+  ]
+}
