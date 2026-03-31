@@ -44,13 +44,13 @@ export default function Home() {
           fetch('/api/schedules'),
           fetch('/api/events')
         ]);
-        
+
         const schedulesData = await schedulesRes.json();
         const eventsData = await eventsRes.json();
-        
+
         setSchedules(schedulesData);
         setEvents(eventsData);
-        
+
         // Set selected date to today or first available date
         const today = getTodayDateStr();
         const dateToUse = schedulesData[today] ? today : (schedulesData['default'] ? 'default' : Object.keys(schedulesData)[0]);
@@ -143,29 +143,27 @@ export default function Home() {
           )}
         </div>
 
-        {isLocalhost && (
-          <>
-            {/* Summary Section */}
-            <section className="mb-12">
-              <h2 className="text-xl sm:text-2xl font-bold mb-6 text-foreground">Daily Summary</h2>
-              <DailySummary schedule={currentSchedule} />
-            </section>
+        <>
+          {/* Summary Section */}
+          <section className="mb-12">
+            <h2 className="text-xl sm:text-2xl font-bold mb-6 text-foreground">Daily Summary</h2>
+            <DailySummary schedule={currentSchedule} />
+          </section>
 
-            {/* Schedule Table Section */}
-            <section className="mb-12">
-              <h2 className="text-xl sm:text-2xl font-bold mb-6 text-foreground">
-                Schedule for {selectedDate === 'default' ? 'Today' : selectedDate}
-              </h2>
-              <ScheduleTable schedule={currentSchedule} selectedDate={selectedDate} />
-            </section>
+          {/* Schedule Table Section */}
+          <section className="mb-12">
+            <h2 className="text-xl sm:text-2xl font-bold mb-6 text-foreground">
+              Schedule for {selectedDate === 'default' ? 'Today' : selectedDate}
+            </h2>
+            <ScheduleTable schedule={currentSchedule} selectedDate={selectedDate} />
+          </section>
 
-            {/* Reflection Section */}
-            <section className="mb-12">
-              <h2 className="text-xl sm:text-2xl font-bold mb-6 text-foreground">Daily Reflection</h2>
-              <Reflection selectedDate={selectedDate} />
-            </section>
-          </>
-        )}
+          {/* Reflection Section */}
+          <section className="mb-12">
+            <h2 className="text-xl sm:text-2xl font-bold mb-6 text-foreground">Daily Reflection</h2>
+            <Reflection selectedDate={selectedDate} />
+          </section>
+        </>
       </div>
 
       {/* Footer */}
