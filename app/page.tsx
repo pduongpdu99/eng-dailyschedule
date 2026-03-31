@@ -8,6 +8,7 @@ import { FileImporter } from '@/components/FileImporter';
 import { Summary } from '@/components/Summary';
 import { Reflection } from '@/components/Reflection';
 import { EventManager } from '@/components/EventManager';
+import { SyncButton } from '@/components/SyncButton';
 import { ScheduleItem } from '@/lib/scheduleUtils';
 import { CalendarEvent } from '@/lib/eventsUtils';
 
@@ -116,6 +117,7 @@ export default function Home() {
             />
           </div>
           <div className="space-y-4">
+            <SyncButton />
             <FileImporter onImport={handleImport} />
             <EventManager
               selectedDate={selectedDate}
