@@ -5,8 +5,9 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import { ScheduleTable } from '@/components/ScheduleTable';
 import { DateCalendar } from '@/components/DateCalendar';
 import { FileImporter } from '@/components/FileImporter';
-import { Summary } from '@/components/Summary';
+
 import { Reflection } from '@/components/Reflection';
+import { Summary } from '@/components/Summary';
 import { EventManager } from '@/components/EventManager';
 import { SyncButton } from '@/components/SyncButton';
 import { ScheduleItem } from '@/lib/scheduleUtils';
@@ -17,6 +18,7 @@ export default function Home() {
   const [events, setEvents] = useState<Record<string, CalendarEvent[]>>({});
   const [selectedDate, setSelectedDate] = useState<string>('default');
   const [isLoading, setIsLoading] = useState(true);
+  const [isLocalhost, setIsLocalhost] = useState(false);
 
   // Get today's date in local timezone
   const getTodayDateStr = () => {
@@ -31,6 +33,13 @@ export default function Home() {
   useEffect(() => {
     const loadData = async () => {
       try {
+        // Detect if running on localhost
+        const isLocal = typeof window !== 'undefined' && (
+          window.location.hostname === 'localhost' ||
+          window.location.hostname === '127.0.0.1'
+        );
+        setIsLocalhost(isLocal);
+
         const [schedulesRes, eventsRes] = await Promise.all([
           fetch('/api/schedules'),
           fetch('/api/events')
@@ -105,10 +114,59 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-        {/* Calendar and Importer Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
-          <div className="lg:col-span-2">
+      {isLocalhost ? (
+        // Localhost: Show full interface with sidebar
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+          {/* Calendar and Importer Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+            <div className="lg:col-span-2">
+              <DateCalendar
+                selectedDate={selectedDate}
+                onDateSelect={setSelectedDate}
+                schedules={schedules}
+                events={events}
+              />
+            </div>
+            <div className="space-y-4">
+              <SyncButton />
+              <FileImporter onImport={handleImport} />
+              <EventManager
+                selectedDate={selectedDate}
+                events={events[selectedDate] || []}
+                onEventsChange={(updatedEvents) => {
+                  setEvents(prev => ({
+                    ...prev,
+                    [selectedDate]: updatedEvents
+                  }));
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Summary Section */}
+          <section className="mb-12">
+            <h2 className="text-xl sm:text-2xl font-bold mb-6 text-foreground">Daily Summary</h2>
+            <Summary schedule={currentSchedule} />
+          </section>
+
+          {/* Schedule Table Section */}
+          <section className="mb-12">
+            <h2 className="text-xl sm:text-2xl font-bold mb-6 text-foreground">
+              Schedule for {selectedDate === 'default' ? 'Today' : selectedDate}
+            </h2>
+            <ScheduleTable schedule={currentSchedule} selectedDate={selectedDate} />
+          </section>
+
+          {/* Reflection Section */}
+          <section className="mb-12">
+            <h2 className="text-xl sm:text-2xl font-bold mb-6 text-foreground">Daily Reflection</h2>
+            <Reflection selectedDate={selectedDate} />
+          </section>
+        </div>
+      ) : (
+        // Production: Calendar fullscreen only
+        <div className="w-full px-4 sm:px-6 py-8 sm:py-12">
+          <div className="w-full">
             <DateCalendar
               selectedDate={selectedDate}
               onDateSelect={setSelectedDate}
@@ -116,42 +174,8 @@ export default function Home() {
               events={events}
             />
           </div>
-          <div className="space-y-4">
-            <SyncButton />
-            <FileImporter onImport={handleImport} />
-            <EventManager
-              selectedDate={selectedDate}
-              events={events[selectedDate] || []}
-              onEventsChange={(updatedEvents) => {
-                setEvents(prev => ({
-                  ...prev,
-                  [selectedDate]: updatedEvents
-                }));
-              }}
-            />
-          </div>
         </div>
-
-        {/* Summary Section */}
-        <section className="mb-12">
-          <h2 className="text-xl sm:text-2xl font-bold mb-6 text-foreground">Daily Summary</h2>
-          <Summary schedule={currentSchedule} />
-        </section>
-
-        {/* Schedule Table Section */}
-        <section className="mb-12">
-          <h2 className="text-xl sm:text-2xl font-bold mb-6 text-foreground">
-            Schedule for {selectedDate === 'default' ? 'Today' : selectedDate}
-          </h2>
-          <ScheduleTable schedule={currentSchedule} selectedDate={selectedDate} />
-        </section>
-
-        {/* Reflection Section */}
-        <section className="mb-12">
-          <h2 className="text-xl sm:text-2xl font-bold mb-6 text-foreground">Daily Reflection</h2>
-          <Reflection selectedDate={selectedDate} />
-        </section>
-      </div>
+      )}
 
       {/* Footer */}
       <footer className="border-t border-border bg-muted/30 mt-16 sm:mt-20">

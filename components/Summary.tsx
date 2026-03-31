@@ -14,7 +14,7 @@ export function Summary({ schedule }: SummaryProps) {
   const totals = calculateCategoryTotals(schedule);
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
 
-  const displayCategories: Record<string, string> = {
+  const displayNames: Record<string, string> = {
     listening: 'Listening',
     reading: 'Reading',
     writing: 'Writing',
@@ -42,21 +42,17 @@ export function Summary({ schedule }: SummaryProps) {
   };
 
   const getCategoryDetails = (category: string) => {
-    return schedule
-      .filter(item => item.type === category)
-      .map(item => {
-        const { hours, minutes } = calculateDuration(item.start, item.end);
-        return {
-          title: item.title,
-          time: formatDuration(hours, minutes)
-        };
-      });
+    return schedule.filter(item => item.type === category).map(item => {
+      const { hours, minutes } = calculateDuration(item.start, item.end);
+      return {
+        title: item.title,
+        time: formatDuration(hours, minutes)
+      };
+    });
   };
 
   const renderCategoryGroup = (categories: string[], groupName?: string) => {
-    const groupTotals = categories
-      .map(cat => [cat, totals[cat]] as const)
-      .filter(([_, dur]) => dur);
+    const groupTotals = categories.map(cat => [cat, totals[cat]] as const).filter(([_, dur]) => dur);
 
     if (groupTotals.length === 0) return null;
 
@@ -81,7 +77,7 @@ export function Summary({ schedule }: SummaryProps) {
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
                       <p className="text-sm text-muted-foreground font-medium">
-                        {displayCategories[category] || category}
+                        {displayNames[category] || category}
                       </p>
                       <p className="text-2xl font-bold text-foreground mt-1">
                         {formatDuration(duration.hours, duration.minutes)}

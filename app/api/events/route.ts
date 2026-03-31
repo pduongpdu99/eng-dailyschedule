@@ -2,9 +2,35 @@ import fs from 'fs';
 import path from 'path';
 import { NextResponse } from 'next/server';
 import { CalendarEvent } from '@/lib/eventsUtils';
+import { connectToDatabase } from '@/lib/mongodb';
 
 export async function GET() {
   try {
+    // Try to load from MongoDB first
+    try {
+      const { db } = await connectToDatabase();
+      const events = await db?.collection('events').find({}).toArray();
+      
+      if (events && events.length > 0) {
+        // Convert MongoDB array to object format
+        const data: Record<string, CalendarEvent[]> = {};
+        events.forEach((doc: any) => {
+          const { dateStr, items } = doc;
+          if (dateStr && items) {
+            data[dateStr] = items;
+          }
+        });
+        
+        // If we got data from MongoDB, return it
+        if (Object.keys(data).length > 0) {
+          return NextResponse.json(data);
+        }
+      }
+    } catch (dbError) {
+      console.log('MongoDB not available, falling back to JSON files');
+    }
+
+    // Fallback to JSON files
     const eventsFile = path.join(process.cwd(), 'data', 'events.json');
     let data: Record<string, CalendarEvent[]> = {};
     
