@@ -6,11 +6,11 @@ import { ScheduleItem, calculateCategoryTotals, formatDuration, calculateDuratio
 import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 
-interface SummaryProps {
+interface DailySummaryProps {
   schedule: ScheduleItem[];
 }
 
-export function Summary({ schedule }: SummaryProps) {
+export function DailySummary({ schedule }: DailySummaryProps) {
   const totals = calculateCategoryTotals(schedule);
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
 

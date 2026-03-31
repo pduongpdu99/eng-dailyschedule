@@ -7,7 +7,7 @@ import { DateCalendar } from '@/components/DateCalendar';
 import { FileImporter } from '@/components/FileImporter';
 
 import { Reflection } from '@/components/Reflection';
-import { Summary } from '@/components/Summary';
+import { DailySummary } from '@/components/DailySummary';
 import { EventManager } from '@/components/EventManager';
 import { SyncButton } from '@/components/SyncButton';
 import { ScheduleItem } from '@/lib/scheduleUtils';
@@ -114,19 +114,18 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      {isLocalhost ? (
-        // Localhost: Show full interface with sidebar
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-          {/* Calendar and Importer Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
-            <div className="lg:col-span-2">
-              <DateCalendar
-                selectedDate={selectedDate}
-                onDateSelect={setSelectedDate}
-                schedules={schedules}
-                events={events}
-              />
-            </div>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        {/* Calendar and Importer Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+          <div className={isLocalhost ? 'lg:col-span-2' : 'lg:col-span-3'}>
+            <DateCalendar
+              selectedDate={selectedDate}
+              onDateSelect={setSelectedDate}
+              schedules={schedules}
+              events={events}
+            />
+          </div>
+          {isLocalhost && (
             <div className="space-y-4">
               <SyncButton />
               <FileImporter onImport={handleImport} />
@@ -141,41 +140,33 @@ export default function Home() {
                 }}
               />
             </div>
-          </div>
-
-          {/* Summary Section */}
-          <section className="mb-12">
-            <h2 className="text-xl sm:text-2xl font-bold mb-6 text-foreground">Daily Summary</h2>
-            <Summary schedule={currentSchedule} />
-          </section>
-
-          {/* Schedule Table Section */}
-          <section className="mb-12">
-            <h2 className="text-xl sm:text-2xl font-bold mb-6 text-foreground">
-              Schedule for {selectedDate === 'default' ? 'Today' : selectedDate}
-            </h2>
-            <ScheduleTable schedule={currentSchedule} selectedDate={selectedDate} />
-          </section>
-
-          {/* Reflection Section */}
-          <section className="mb-12">
-            <h2 className="text-xl sm:text-2xl font-bold mb-6 text-foreground">Daily Reflection</h2>
-            <Reflection selectedDate={selectedDate} />
-          </section>
+          )}
         </div>
-      ) : (
-        // Production: Calendar fullscreen only
-        <div className="w-full px-4 sm:px-6 py-8 sm:py-12">
-          <div className="w-full">
-            <DateCalendar
-              selectedDate={selectedDate}
-              onDateSelect={setSelectedDate}
-              schedules={schedules}
-              events={events}
-            />
-          </div>
-        </div>
-      )}
+
+        {isLocalhost && (
+          <>
+            {/* Summary Section */}
+            <section className="mb-12">
+              <h2 className="text-xl sm:text-2xl font-bold mb-6 text-foreground">Daily Summary</h2>
+              <DailySummary schedule={currentSchedule} />
+            </section>
+
+            {/* Schedule Table Section */}
+            <section className="mb-12">
+              <h2 className="text-xl sm:text-2xl font-bold mb-6 text-foreground">
+                Schedule for {selectedDate === 'default' ? 'Today' : selectedDate}
+              </h2>
+              <ScheduleTable schedule={currentSchedule} selectedDate={selectedDate} />
+            </section>
+
+            {/* Reflection Section */}
+            <section className="mb-12">
+              <h2 className="text-xl sm:text-2xl font-bold mb-6 text-foreground">Daily Reflection</h2>
+              <Reflection selectedDate={selectedDate} />
+            </section>
+          </>
+        )}
+      </div>
 
       {/* Footer */}
       <footer className="border-t border-border bg-muted/30 mt-16 sm:mt-20">
