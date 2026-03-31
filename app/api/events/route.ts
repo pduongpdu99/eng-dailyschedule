@@ -35,7 +35,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const eventsFile = path.join(process.cwd(), 'data', 'events.json');
+    const eventsFile = path.join('data', 'events.json');
     
     // Read existing data
     let data: Record<string, CalendarEvent[]> = {};
@@ -82,7 +82,7 @@ export async function DELETE(request: Request) {
       );
     }
 
-    const eventsFile = path.join(process.cwd(), 'data', 'events.json');
+    const eventsFile = path.join('data', 'events.json');
     let data: Record<string, CalendarEvent[]> = {};
     
     if (fs.existsSync(eventsFile)) {
