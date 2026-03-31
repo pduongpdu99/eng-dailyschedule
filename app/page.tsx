@@ -1,17 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { ScheduleTable } from '@/components/ScheduleTable';
 import { DateCalendar } from '@/components/DateCalendar';
 import { FileImporter } from '@/components/FileImporter';
-
 import { Reflection } from '@/components/Reflection';
 import { DailySummary } from '@/components/DailySummary';
 import { EventManager } from '@/components/EventManager';
 import { SyncButton } from '@/components/SyncButton';
 import { ScheduleItem } from '@/lib/scheduleUtils';
 import { CalendarEvent } from '@/lib/eventsUtils';
+// import { Clock } from 'lucide-react';
 
 export default function Home() {
   const [schedules, setSchedules] = useState<Record<string, ScheduleItem[]>>({});
@@ -19,6 +19,9 @@ export default function Home() {
   const [selectedDate, setSelectedDate] = useState<string>('default');
   const [isLoading, setIsLoading] = useState(true);
   const [isLocalhost, setIsLocalhost] = useState(false);
+
+  // Ref để scroll đến phần Schedule Table
+  const scheduleTableRef = useRef<HTMLDivElement>(null);
 
   // Get today's date in local timezone
   const getTodayDateStr = () => {
@@ -53,7 +56,10 @@ export default function Home() {
 
         // Set selected date to today or first available date
         const today = getTodayDateStr();
-        const dateToUse = schedulesData[today] ? today : (schedulesData['default'] ? 'default' : Object.keys(schedulesData)[0]);
+        const dateToUse = schedulesData[today] 
+          ? today 
+          : (schedulesData['default'] ? 'default' : Object.keys(schedulesData)[0]);
+        
         setSelectedDate(dateToUse || 'default');
       } catch (error) {
         console.error('Failed to load data:', error);
@@ -75,6 +81,16 @@ export default function Home() {
   };
 
   const currentSchedule = schedules[selectedDate] || [];
+
+  // Scroll đến phần Schedule Table (nơi có highlight theo giờ hệ thống)
+  const scrollToCurrentTime = () => {
+    if (scheduleTableRef.current) {
+      scheduleTableRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  };
 
   if (isLoading) {
     return (
@@ -151,7 +167,7 @@ export default function Home() {
           </section>
 
           {/* Schedule Table Section */}
-          <section className="mb-12">
+          <section className="mb-12" ref={scheduleTableRef}>
             <h2 className="text-xl sm:text-2xl font-bold mb-6 text-foreground">
               Schedule for {selectedDate === 'default' ? 'Today' : selectedDate}
             </h2>
@@ -174,6 +190,21 @@ export default function Home() {
           </p>
         </div>
       </footer>
+
+      {/* Floating Button - Góc dưới bên phải */}
+      {/* {currentSchedule.length > 0 && (
+        <button
+          onClick={scrollToCurrentTime}
+          className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full 
+                     bg-primary text-primary-foreground shadow-xl hover:bg-primary/90 
+                     hover:scale-110 active:scale-95 transition-all duration-200 
+                     focus:outline-none focus:ring-4 focus:ring-primary/30"
+          aria-label="Scroll to current time"
+          title="Nhảy đến thời gian hiện tại"
+        >
+          <Clock className="h-6 w-6" />
+        </button>
+      )} */}
     </main>
   );
 }

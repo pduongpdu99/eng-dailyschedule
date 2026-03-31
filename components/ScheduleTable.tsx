@@ -149,13 +149,11 @@ export function ScheduleTable({ schedule, selectedDate }: ScheduleTableProps) {
                 return (
                   <tr
                     key={index}
-                    className={`border-b border-border transition-all hover:bg-muted/50 ${
-                      isCompleted ? 'bg-muted/30' : ''
-                    } ${
-                      isOngoing 
-                        ? 'bg-primary/10 border-l-4 border-l-primary font-medium' 
+                    className={`border-b border-border transition-all hover:bg-muted/50 ${isCompleted ? 'bg-muted/30' : ''
+                      } ${isOngoing
+                        ? 'bg-primary/10 border-l-4 border-l-primary font-medium'
                         : ''
-                    }`}
+                      }`}
                   >
                     {isEditing ? (
                       /* Phần edit giữ nguyên */
