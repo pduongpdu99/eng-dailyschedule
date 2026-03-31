@@ -13,11 +13,11 @@ interface ScheduleTableProps {
 }
 
 const TIME_PERIODS = [
-  { name: 'Early Morning', start: 0, end: 360 }, // 0:00 - 6:00
-  { name: 'Morning', start: 360, end: 720 }, // 6:00 - 12:00
-  { name: 'Noon - Afternoon', start: 720, end: 1020 }, // 12:00 - 17:00
-  { name: 'Evening', start: 1020, end: 1260 }, // 17:00 - 21:00
-  { name: 'Night', start: 1260, end: 1440 }, // 21:00 - 24:00
+  { name: 'Early Morning', start: 0, end: 360 },
+  { name: 'Morning', start: 360, end: 720 },
+  { name: 'Noon - Afternoon', start: 720, end: 1020 },
+  { name: 'Evening', start: 1020, end: 1260 },
+  { name: 'Night', start: 1260, end: 1440 },
 ];
 
 export function ScheduleTable({ schedule, selectedDate }: ScheduleTableProps) {
@@ -25,6 +25,16 @@ export function ScheduleTable({ schedule, selectedDate }: ScheduleTableProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedSchedule, setEditedSchedule] = useState<ScheduleItem[]>(schedule);
   const [isSaving, setIsSaving] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date()); // ← Thêm dòng này
+
+  // Cập nhật giờ thực tế mỗi 30 giây
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Load completed items from localStorage
   useEffect(() => {
@@ -39,12 +49,10 @@ export function ScheduleTable({ schedule, selectedDate }: ScheduleTableProps) {
     }
   }, [selectedDate]);
 
-  // Update edited schedule when schedule prop changes
   useEffect(() => {
     setEditedSchedule(schedule);
   }, [schedule]);
 
-  // Save completed items to localStorage
   useEffect(() => {
     const key = `schedule-${selectedDate}-completed`;
     localStorage.setItem(key, JSON.stringify(Array.from(completed)));
@@ -75,9 +83,7 @@ export function ScheduleTable({ schedule, selectedDate }: ScheduleTableProps) {
         body: JSON.stringify({ dateStr: selectedDate, schedule: editedSchedule }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to save schedule');
-      }
+      if (!response.ok) throw new Error('Failed to save schedule');
 
       setIsEditing(false);
       window.location.reload();
@@ -101,6 +107,15 @@ export function ScheduleTable({ schedule, selectedDate }: ScheduleTableProps) {
     });
   };
 
+  // Hàm kiểm tra item có đang diễn ra không
+  const isItemOngoing = (item: ScheduleItem): boolean => {
+    const nowMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
+    const startMinutes = timeToMinutes(item.start);
+    const endMinutes = timeToMinutes(item.end);
+
+    return nowMinutes >= startMinutes && nowMinutes < endMinutes;
+  };
+
   const renderTable = (items: ScheduleItem[], periodName: string) => {
     if (items.length === 0) return null;
 
@@ -115,7 +130,7 @@ export function ScheduleTable({ schedule, selectedDate }: ScheduleTableProps) {
                 <th className="w-28 px-4 py-3 text-left text-sm font-semibold text-foreground">Category</th>
                 <th className="flex-1 px-4 py-3 text-left text-sm font-semibold text-foreground">Content</th>
                 <th className="flex-1 px-4 py-3 text-left text-sm font-semibold text-foreground">Details</th>
-                <th className="w-12 px-4 py-3 text-center text-sm font-semibold text-foreground">Done</th>
+                {/* <th className="w-12 px-4 py-3 text-center text-sm font-semibold text-foreground">Done</th> */}
               </tr>
             </thead>
             <tbody>
@@ -129,14 +144,21 @@ export function ScheduleTable({ schedule, selectedDate }: ScheduleTableProps) {
                 const { hours, minutes } = calculateDuration(item.start, item.end);
                 const duration = formatDuration(hours, minutes);
 
+                const isOngoing = isItemOngoing(item);
+
                 return (
                   <tr
                     key={index}
-                    className={`border-b border-border transition-colors hover:bg-muted/50 ${
+                    className={`border-b border-border transition-all hover:bg-muted/50 ${
                       isCompleted ? 'bg-muted/30' : ''
+                    } ${
+                      isOngoing 
+                        ? 'bg-primary/10 border-l-4 border-l-primary font-medium' 
+                        : ''
                     }`}
                   >
                     {isEditing ? (
+                      /* Phần edit giữ nguyên */
                       <>
                         <td className="px-4 py-3">
                           <div className="flex gap-1">
@@ -160,7 +182,6 @@ export function ScheduleTable({ schedule, selectedDate }: ScheduleTableProps) {
                             value={item.type}
                             onChange={(e) => handleEditChange(originalIndex, 'type', e.target.value)}
                             className="text-xs"
-                            placeholder="Type"
                           />
                         </td>
                         <td className="px-4 py-3">
@@ -168,7 +189,6 @@ export function ScheduleTable({ schedule, selectedDate }: ScheduleTableProps) {
                             value={item.title}
                             onChange={(e) => handleEditChange(originalIndex, 'title', e.target.value)}
                             className="text-xs"
-                            placeholder="Title"
                           />
                         </td>
                         <td className="px-4 py-3">
@@ -176,22 +196,16 @@ export function ScheduleTable({ schedule, selectedDate }: ScheduleTableProps) {
                             value={item.detail}
                             onChange={(e) => handleEditChange(originalIndex, 'detail', e.target.value)}
                             className="text-xs"
-                            placeholder="Detail"
                           />
                         </td>
                         <td className="px-4 py-3 text-center">
-                          <Checkbox
-                            checked={isCompleted}
-                            onCheckedChange={() => toggleCompleted(id)}
-                            className="mx-auto"
-                            disabled
-                          />
+                          <Checkbox checked={isCompleted} onCheckedChange={() => toggleCompleted(id)} disabled />
                         </td>
                       </>
                     ) : (
                       <>
                         <td className="px-4 py-3">
-                          <span className="font-mono text-sm font-medium text-foreground">
+                          <span className={`font-mono text-sm font-medium ${isOngoing ? 'text-primary' : 'text-foreground'}`}>
                             {item.start}–{item.end}
                           </span>
                           <div className="text-xs text-muted-foreground">{duration}</div>
@@ -202,20 +216,20 @@ export function ScheduleTable({ schedule, selectedDate }: ScheduleTableProps) {
                           </span>
                         </td>
                         <td className="px-4 py-3">
-                          <div className={`text-sm font-medium ${isCompleted ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
+                          <div className={`text-sm font-medium ${isCompleted ? 'line-through text-muted-foreground' : 'text-foreground'} ${isOngoing ? 'text-primary' : ''}`}>
                             {item.title}
                           </div>
                         </td>
                         <td className="px-4 py-3">
                           <div className="text-sm text-muted-foreground">{item.detail}</div>
                         </td>
-                        <td className="px-4 py-3 text-center">
+                        {/* <td className="px-4 py-3 text-center">
                           <Checkbox
                             checked={isCompleted}
                             onCheckedChange={() => toggleCompleted(id)}
                             className="mx-auto"
                           />
-                        </td>
+                        </td> */}
                       </>
                     )}
                   </tr>
@@ -234,31 +248,17 @@ export function ScheduleTable({ schedule, selectedDate }: ScheduleTableProps) {
       <div className="flex gap-2 justify-end">
         {isEditing ? (
           <>
-            <Button
-              variant="outline"
-              onClick={handleCancel}
-              className="gap-2"
-            >
-              <X className="h-4 w-4" />
-              Cancel
+            <Button variant="outline" onClick={handleCancel} className="gap-2">
+              <X className="h-4 w-4" /> Cancel
             </Button>
-            <Button
-              onClick={handleSave}
-              disabled={isSaving}
-              className="gap-2"
-            >
+            <Button onClick={handleSave} disabled={isSaving} className="gap-2">
               <Save className="h-4 w-4" />
               {isSaving ? 'Saving...' : 'Save Changes'}
             </Button>
           </>
         ) : (
-          <Button
-            variant="outline"
-            onClick={() => setIsEditing(true)}
-            className="gap-2"
-          >
-            <Edit2 className="h-4 w-4" />
-            Edit Schedule
+          <Button variant="outline" onClick={() => setIsEditing(true)} className="gap-2">
+            <Edit2 className="h-4 w-4" /> Edit Schedule
           </Button>
         )}
       </div>
