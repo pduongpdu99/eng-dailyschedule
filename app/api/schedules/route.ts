@@ -1,15 +1,15 @@
-import fs from 'fs';
-import path from 'path';
-import { NextResponse } from 'next/server';
-import { connectToDatabase } from '@/lib/mongodb';
+import fs from "fs";
+import path from "path";
+import { NextResponse } from "next/server";
+import { connectToDatabase } from "@/lib/mongodb";
 
 export async function GET() {
   try {
     // Try to load from MongoDB first
     try {
       const { db } = await connectToDatabase();
-      const schedules = await db?.collection('schedules').find({}).toArray();
-      
+      const schedules = await db?.collection("schedules").find({}).toArray();
+
       if (schedules && schedules.length > 0) {
         // Convert MongoDB array to object format
         const data: Record<string, any> = {};
@@ -19,66 +19,65 @@ export async function GET() {
             data[date] = items;
           }
         });
-        
+
         // If we got data from MongoDB, return it
         if (Object.keys(data).length > 0) {
           return NextResponse.json(data);
         }
       }
     } catch (dbError) {
-      console.log('MongoDB not available, falling back to JSON files');
+      console.log("MongoDB not available, falling back to JSON files");
     }
 
     // Fallback to JSON files
-    const scheduleFile = path.join(process.cwd(), 'data', 'dailySchedule.json');
-    const data = JSON.parse(fs.readFileSync(scheduleFile, 'utf-8'));
+    const scheduleFile = path.join("data", "dailySchedule.json");
+    const data = JSON.parse(fs.readFileSync(scheduleFile, "utf-8"));
     return NextResponse.json(data);
   } catch (error) {
-    console.error('Failed to load schedules:', error);
+    console.error("Failed to load schedules:", error);
     return NextResponse.json({ default: [] }, { status: 500 });
   }
 }
 
 export async function POST(request: Request) {
+  const body = await request.json();
+  const { dateStr, schedule } = body;
   try {
-    const body = await request.json();
-    const { date, schedule } = body;
-
-    if (!date || !Array.isArray(schedule)) {
+    if (!dateStr || !Array.isArray(schedule)) {
       return NextResponse.json(
-        { error: 'Missing or invalid date and schedule' },
-        { status: 400 }
+        { error: "Missing or invalid date and schedule" },
+        { status: 400 },
       );
     }
 
-    const scheduleFile = path.join(process.cwd(), 'data', 'dailySchedule.json');
-    
+    const scheduleFile = path.join("data", "dailySchedule.json");
+
     // Read existing data
-    let data:any = {};
+    let data: any = {};
     if (fs.existsSync(scheduleFile)) {
       try {
-        data = JSON.parse(fs.readFileSync(scheduleFile, 'utf-8'));
+        data = JSON.parse(fs.readFileSync(scheduleFile, "utf-8"));
       } catch (e) {
-        console.error('Failed to parse existing schedule file:', e);
+        console.error("Failed to parse existing schedule file:", e);
         data = {};
       }
     }
 
     // Add or update the schedule for this date
-    data[date] = schedule;
+    data[dateStr] = schedule;
 
     // Write back to file
     fs.writeFileSync(scheduleFile, JSON.stringify(data, null, 2));
 
     return NextResponse.json(
-      { success: true, date, itemCount: schedule.length },
-      { status: 200 }
+      { success: true, dateStr, itemCount: schedule.length },
+      { status: 200 },
     );
   } catch (error) {
-    console.error('Failed to save schedule:', error);
+    console.error("Failed to save schedule:", error);
     return NextResponse.json(
-      { error: 'Failed to save schedule' },
-      { status: 500 }
+      { error: "Failed to save schedule" },
+      { status: 500 },
     );
   }
 }
