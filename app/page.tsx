@@ -7,10 +7,13 @@ import { DateCalendar } from '@/components/DateCalendar';
 import { FileImporter } from '@/components/FileImporter';
 import { Summary } from '@/components/Summary';
 import { Reflection } from '@/components/Reflection';
+import { EventManager } from '@/components/EventManager';
 import { ScheduleItem } from '@/lib/scheduleUtils';
+import { CalendarEvent } from '@/lib/eventsUtils';
 
 export default function Home() {
   const [schedules, setSchedules] = useState<Record<string, ScheduleItem[]>>({});
+  const [events, setEvents] = useState<Record<string, CalendarEvent[]>>({});
   const [selectedDate, setSelectedDate] = useState<string>('default');
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,25 +28,32 @@ export default function Home() {
 
   // Load initial data
   useEffect(() => {
-    const loadSchedules = async () => {
+    const loadData = async () => {
       try {
-        const response = await fetch('/api/schedules');
-        const data = await response.json();
-        setSchedules(data);
+        const [schedulesRes, eventsRes] = await Promise.all([
+          fetch('/api/schedules'),
+          fetch('/api/events')
+        ]);
+        
+        const schedulesData = await schedulesRes.json();
+        const eventsData = await eventsRes.json();
+        
+        setSchedules(schedulesData);
+        setEvents(eventsData);
         
         // Set selected date to today or first available date
         const today = getTodayDateStr();
-        const dateToUse = data[today] ? today : (data['default'] ? 'default' : Object.keys(data)[0]);
+        const dateToUse = schedulesData[today] ? today : (schedulesData['default'] ? 'default' : Object.keys(schedulesData)[0]);
         setSelectedDate(dateToUse || 'default');
       } catch (error) {
-        console.error('Failed to load schedules:', error);
+        console.error('Failed to load data:', error);
         setSelectedDate('default');
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadSchedules();
+    loadData();
   }, []);
 
   const handleImport = (dateStr: string, schedule: ScheduleItem[]) => {
@@ -102,10 +112,21 @@ export default function Home() {
               selectedDate={selectedDate}
               onDateSelect={setSelectedDate}
               schedules={schedules}
+              events={events}
             />
           </div>
-          <div>
+          <div className="space-y-4">
             <FileImporter onImport={handleImport} />
+            <EventManager
+              selectedDate={selectedDate}
+              events={events[selectedDate] || []}
+              onEventsChange={(updatedEvents) => {
+                setEvents(prev => ({
+                  ...prev,
+                  [selectedDate]: updatedEvents
+                }));
+              }}
+            />
           </div>
         </div>
 

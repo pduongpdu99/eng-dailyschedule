@@ -9,14 +9,16 @@ import {
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
 import { ScheduleItem, calculateCategoryTotals } from '@/lib/scheduleUtils';
+import { CalendarEvent } from '@/lib/eventsUtils';
 
 interface DateCalendarProps {
   selectedDate: string;
   onDateSelect: (date: string) => void;
   schedules: Record<string, ScheduleItem[]>;
+  events?: Record<string, CalendarEvent[]>;
 }
 
-export function DateCalendar({ selectedDate, onDateSelect, schedules }: DateCalendarProps) {
+export function DateCalendar({ selectedDate, onDateSelect, schedules, events = {} }: DateCalendarProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   const daysInMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -136,6 +138,7 @@ export function DateCalendar({ selectedDate, onDateSelect, schedules }: DateCale
             const isSelected = day.dateStr === selectedDate;
             const isToday = day.dateStr === todayDateStr;
             const hasSchedule = day.dateStr in schedules;
+            const hasEvent = day.dateStr in events;
             const dateStr = day.dateStr;
 
             return (
@@ -146,6 +149,8 @@ export function DateCalendar({ selectedDate, onDateSelect, schedules }: DateCale
                     className={`aspect-square flex flex-col items-center justify-center rounded-lg p-2 text-sm font-medium transition-all duration-200 relative group ${
                       isSelected
                         ? 'bg-primary text-primary-foreground shadow-md scale-105'
+                        : hasEvent
+                        ? 'bg-pink-100 dark:bg-pink-900/20 text-foreground border-2 border-pink-400 dark:border-pink-600'
                         : isToday
                         ? 'bg-orange-100 dark:bg-orange-900/30 text-foreground border-2 border-orange-400 dark:border-orange-600'
                         : hasSchedule
@@ -156,13 +161,16 @@ export function DateCalendar({ selectedDate, onDateSelect, schedules }: DateCale
                     <span className="relative z-10">{day.day}</span>
                     
                     {/* Visual indicator for dates with data */}
-                    {hasSchedule && !isSelected && (
+                    {hasEvent && !isSelected && (
+                      <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 h-1.5 w-1.5 bg-pink-500 rounded-full" />
+                    )}
+                    {hasSchedule && !isSelected && !hasEvent && (
                       <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 h-1.5 w-1.5 bg-blue-500 rounded-full" />
                     )}
-                    {isToday && !isSelected && (
+                    {isToday && !isSelected && !hasEvent && (
                       <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 h-1.5 w-1.5 bg-orange-500 rounded-full" />
                     )}
-                    {isSelected && (hasSchedule || isToday) && (
+                    {isSelected && (hasSchedule || isToday || hasEvent) && (
                       <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 h-1.5 w-1.5 bg-primary-foreground rounded-full" />
                     )}
                   </button>
@@ -192,7 +200,13 @@ export function DateCalendar({ selectedDate, onDateSelect, schedules }: DateCale
 
         {/* Legend */}
         <div className="mt-6 space-y-2 rounded-lg bg-muted/30 p-4">
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-lg bg-pink-100 dark:bg-pink-900/20 border-2 border-pink-400 dark:border-pink-600 flex items-center justify-center text-xs font-medium">
+                <div className="h-1.5 w-1.5 rounded-full bg-pink-500" />
+              </div>
+              <span className="text-xs text-muted-foreground">Has event</span>
+            </div>
             <div className="flex items-center gap-2">
               <div className="h-8 w-8 rounded-lg bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-700 flex items-center justify-center text-xs font-medium">
                 <div className="h-1.5 w-1.5 rounded-full bg-blue-500" />
