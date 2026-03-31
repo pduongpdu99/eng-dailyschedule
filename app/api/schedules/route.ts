@@ -14,9 +14,9 @@ export async function GET() {
         // Convert MongoDB array to object format
         const data: Record<string, any> = {};
         schedules.forEach((doc: any) => {
-          const { dateStr, items } = doc;
-          if (dateStr && items) {
-            data[dateStr] = items;
+          const { date, items } = doc;
+          if (date && items) {
+            data[date] = items;
           }
         });
         
@@ -42,11 +42,11 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { dateStr, schedule } = body;
+    const { date, schedule } = body;
 
-    if (!dateStr || !Array.isArray(schedule)) {
+    if (!date || !Array.isArray(schedule)) {
       return NextResponse.json(
-        { error: 'Missing or invalid dateStr and schedule' },
+        { error: 'Missing or invalid date and schedule' },
         { status: 400 }
       );
     }
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
     const scheduleFile = path.join(process.cwd(), 'data', 'dailySchedule.json');
     
     // Read existing data
-    let data = {};
+    let data:any = {};
     if (fs.existsSync(scheduleFile)) {
       try {
         data = JSON.parse(fs.readFileSync(scheduleFile, 'utf-8'));
@@ -65,13 +65,13 @@ export async function POST(request: Request) {
     }
 
     // Add or update the schedule for this date
-    data[dateStr] = schedule;
+    data[date] = schedule;
 
     // Write back to file
     fs.writeFileSync(scheduleFile, JSON.stringify(data, null, 2));
 
     return NextResponse.json(
-      { success: true, dateStr, itemCount: schedule.length },
+      { success: true, date, itemCount: schedule.length },
       { status: 200 }
     );
   } catch (error) {
